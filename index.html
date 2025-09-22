@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VivenDApp: El Bitcoin del Real Estate</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #181936 0%, #36BDAF 50%, #42BFEC 100%);
+            margin: 0;
+            padding: 0;
+        }
+
+        .presentation-container {
+            position: relative;
+            width: 100vw;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slide {
+            position: absolute;
+            width: 90%;
+            min-height: 85vh;
+            max-height: none;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transform: translateX(100px);
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            text-align: center;
+            overflow-y: visible;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        .slide::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .slide::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .slide::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, #4facfe, #00f2fe);
+            border-radius: 10px;
+        }
+
+        .slide::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, #00f2fe, #4facfe);
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .slide.prev {
+            transform: translateX(-100px);
+        }
+
+        .logo {
+            width: 150px;
+            height: auto;
+            margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            background: linear-gradient(45deg, #32BB75, #42BFEC);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 20px rgba(50, 187, 117, 0.5)); }
+            to { filter: drop-shadow(0 0 30px rgba(66, 191, 236, 0.8)); }
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            color: #181936;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(45deg, #32BB75, #36BDAF);
+            border-radius: 2px;
+        }
+
+        .subtitle {
+            font-size: 1.8rem;
+            color: #181936;
+            margin-bottom: 40px;
+            font-weight: 300;
+        }
+
+        .highlight {
+            background: linear-gradient(45deg, #32BB75, #36BDAF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+            width: 100%;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, rgba(50, 187, 117, 0.1), rgba(66, 191, 236, 0.1));
+            padding: 30px;
+            border-radius: 15px;
+            border: 2px solid rgba(54, 189, 175, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(50, 187, 117, 0.2);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #32BB75, #42BFEC);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 1.2rem;
+            color: #181936;
+        }
+
+        .features-list {
+            list-style: none;
+            margin: 30px 0;
+        }
+
+        .features-list li {
+            padding: 15px;
+            margin: 10px 0;
+            background: rgba(79, 172, 254, 0.1);
+            border-left: 4px solid #4facfe;
+            border-radius: 8px;
+            font-size: 1.3rem;
+            animation: slideInLeft 0.6s ease forwards;
+            opacity: 0;
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .cta-button {
+            background: linear-gradient(45deg, #4facfe, #00f2fe);
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            font-size: 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin: 20px 10px;
+            box-shadow: 0 10px 30px rgba(79, 172, 254, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(79, 172, 254, 0.4);
+            filter: brightness(1.1);
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            background: rgba(50, 187, 117, 0.8);
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-btn:hover {
+            background: rgba(50, 187, 117, 1);
+            transform: scale(1.1);
+        }
+
+        .slide-counter {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: rgba(242, 244, 244, 0.9);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            color: #181936;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(54, 189, 175, 0.3);
+        }
+
+        .animated-text {
+            animation: typeWriter 3s steps(40) 1s both;
+        }
+
+        @keyframes typeWriter {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .table-container {
+            margin: 30px 0;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        th {
+            background: linear-gradient(45deg, #4facfe, #00f2fe);
+            color: white;
+            font-weight: bold;
+        }
+
+        tr:hover {
+            background: rgba(79, 172, 254, 0.1);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(79, 172, 254, 0.2);
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, #4facfe, #00f2fe);
+            border-radius: 4px;
+            animation: fillProgress 3s ease-out forwards;
+            width: 0;
+        }
+
+        @keyframes fillProgress {
+            to { width: 100%; }
+        }
+
+        @media (max-width: 768px) {
+            .slide {
+                padding: 20px;
+                width: 95%;
+                min-height: 85vh;
+            }
+            
+            h1 { font-size: 2.2rem; }
+            h2 { font-size: 1.6rem; margin-bottom: 15px; }
+            .subtitle { font-size: 1.2rem; margin-bottom: 20px; }
+            .stats-grid { 
+                grid-template-columns: 1fr 1fr; 
+                gap: 15px;
+                margin: 15px 0;
+            }
+            .logo { width: 80px; }
+            .stat-number { font-size: 1.8rem; }
+            .stat-label { font-size: 0.9rem; }
+            .features-list li { 
+                padding: 10px; 
+                margin: 6px 0; 
+                font-size: 1rem; 
+            }
+            .cta-button { 
+                padding: 15px 25px; 
+                font-size: 1.2rem; 
+                margin: 10px 5px; 
+            }
+            .table-container { font-size: 0.9rem; }
+        }
+
+        @media (max-height: 700px) {
+            .slide { min-height: 90vh; padding: 20px; }
+            h1 { font-size: 2.4rem; margin-bottom: 10px; }
+            h2 { font-size: 1.8rem; margin-bottom: 15px; }
+            .subtitle { font-size: 1.3rem; margin-bottom: 20px; }
+            .stats-grid { gap: 15px; margin: 15px 0; }
+            .stat-card { padding: 15px; }
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(79, 172, 254, 0.5);
+            border-radius: 50%;
+            animation: float-particle 6s infinite linear;
+        }
+
+        @keyframes float-particle {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-10vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    
+    <div class="slide-counter">
+        <span id="current-slide">1</span> / <span id="total-slides">16</span>
+    </div>
+
+    <div class="presentation-container">
+        <!-- Slide 1: Portada -->
+        <div class="slide active">
+            <svg width="150" height="120" viewBox="0 0 400 320" fill="none" xmlns="http://www.w3.org/2000/svg" class="logo">
+                <defs>
+                    <linearGradient id="buildingGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#32BB75;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#36BDAF;stop-opacity:1" />
+                    </linearGradient>
+                    <linearGradient id="buildingGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#36BDAF;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#42BFEC;stop-opacity:1" />
+                    </linearGradient>
+                    <linearGradient id="houseGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#42BFEC;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#32BB75;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+                
+                <!-- Building 1 -->
+                <rect width="60" height="160" x="60" y="120" fill="url(#buildingGradient1)" rx="8"/>
+                <rect width="12" height="20" x="72" y="140" fill="#F2F4F4" rx="2"/>
+                <rect width="12" height="20" x="96" y="140" fill="#F2F4F4" rx="2"/>
+                <rect width="12" height="20" x="72" y="170" fill="#F2F4F4" rx="2"/>
+                <rect width="12" height="20" x="96" y="170" fill="#F2F4F4" rx="2"/>
+                <rect width="12" height="20" x="72" y="200" fill="#F2F4F4" rx="2"/>
+                <rect width="12" height="20" x="96" y="200" fill="#F2F4F4" rx="2"/>
+                
+                <!-- Building 2 (taller) -->
+                <rect width="60" height="200" x="140" y="80" fill="url(#buildingGradient2)" rx="8"/>
+                <rect width="12" height="20" x="152" y="100" fill="#F2F4F4" rx="2"/>
+                <rect width="12" height="20" x="176" y="100" fill="#F2F4F4" rx="2"/>
+                <rect width="12" height="20" x="152" y="130" fill="#F2F4F4" rx="2"/>
+                <rect width="12" height="20" x="176" y="130" fill="#F2F4F4" rx="2"/>
+                <rect width="12" height="20" x="152" y="160" fill="#F2F4F4" rx="2"/>
+                <rect width="12" height="20" x="176" y="160" fill="#F2F4F4" rx="2"/>
+                <rect width="12" height="20" x="152" y="190" fill="#F2F4F4" rx="2"/>
+                <rect width="12" height="20" x="176" y="190" fill="#F2F4F4" rx="2"/>
+                <rect width="12" height="20" x="152" y="220" fill="#F2F4F4" rx="2"/>
+                <rect width="12" height="20" x="176" y="220" fill="#F2F4F4" rx="2"/>
+                
+                <!-- House shape -->
+                <polygon points="220,140 260,100 300,140 300,240 220,240" fill="url(#houseGradient)"/>
+                <rect width="15" height="25" x="235" y="200" fill="#181936" rx="2"/>
+                <rect width="12" height="12" x="270" y="170" fill="#F2F4F4" rx="2"/>
+                
+                <!-- WiFi/Signal waves -->
+                <circle cx="320" cy="120" r="4" fill="url(#houseGradient)"/>
+                <path d="M320 105 Q335 95 350 105" stroke="url(#houseGradient)" stroke-width="4" fill="none" stroke-linecap="round"/>
+                <path d="M320 90 Q345 75 370 90" stroke="url(#houseGradient)" stroke-width="4" fill="none" stroke-linecap="round"/>
+                <path d="M320 75 Q355 55 390 75" stroke="url(#houseGradient)" stroke-width="4" fill="none" stroke-linecap="round"/>
+            </svg>
+            <h1 class="pulse">VivenDApp</h1>
+            <div class="subtitle">El <span class="highlight">Bitcoin del Real Estate</span></div>
+            <div class="subtitle">Democratizando la inversión inmobiliaria con IA conversacional y blockchain</div>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+            <p style="font-size: 1.2rem; margin-top: 30px;">Presentación para Inversionistas</p>
+            <p style="font-size: 1rem; opacity: 0.8;">Cristian Mosquera Becerra - CEO & Founder</p>
+        </div>
+
+        <!-- Slide 2: El Momento Histórico -->
+        <div class="slide">
+            <h2>🚀 EL MOMENTO HISTÓRICO</h2>
+            <div class="subtitle">"Estamos en 2008, pero del Real Estate"</div>
+            
+            <div class="stats-grid">
+                <div class="stat-card pulse">
+                    <div class="stat-number">$0.008</div>
+                    <div class="stat-label">Bitcoin en 2008</div>
+                </div>
+                <div class="stat-card pulse">
+                    <div class="stat-number">$280T</div>
+                    <div class="stat-label">Mercado Real Estate Global</div>
+                </div>
+            </div>
+
+            <ul class="features-list">
+                <li style="animation-delay: 0.1s;">🎯 Los visionarios compraron Bitcoin a centavos</li>
+                <li style="animation-delay: 0.2s;">⏰ Los escépticos esperaron y perdieron</li>
+                <li style="animation-delay: 0.3s;">💎 Los primeros se hicieron millonarios</li>
+                <li style="animation-delay: 0.4s;">🏠 HOY presentamos el protocolo que hará con el Real Estate lo que Bitcoin hizo con el dinero</li>
+            </ul>
+
+            <div class="highlight" style="font-size: 1.5rem; margin: 30px 0;">
+                "No se trata de SI va a pasar, sino de QUIÉN lo va a construir"
+            </div>
+        </div>
+
+        <!-- Slide 3: La Crisis -->
+        <div class="slide">
+            <h2>🚨 EL SISTEMA ESTÁ ROTO</h2>
+            <div class="subtitle">El Real Estate Opera con Tecnología del Siglo XIX</div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">43M+</div>
+                    <div class="stat-label">Sin vivienda LATAM</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">360</div>
+                    <div class="stat-label">Días para vender</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">8%</div>
+                    <div class="stat-label">En comisiones</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">$50K</div>
+                    <div class="stat-label">Mínimo invertir</div>
+                </div>
+            </div>
+
+            <div style="background: rgba(50, 187, 117, 0.1); padding: 20px; border-radius: 15px; margin: 20px 0;">
+                <div class="highlight" style="font-size: 1.6rem;">
+                    "78% millennials quieren invertir pero NO PUEDEN"
+                </div>
+                <div style="font-size: 1.2rem; margin-top: 10px; color: #181936;">
+                    CERO plataformas tokenización + IA en LATAM
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Nuestra Solución -->
+        <div class="slide">
+            <h2>🎯 ECOSISTEMA REVOLUCIONARIO</h2>
+            <div class="subtitle">Avalanche + Voice-AI + ERC-1155</div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div style="font-size: 1.8rem; margin-bottom: 10px;">🏗️</div>
+                    <div class="stat-label"><strong>CAPA 1:</strong><br>Registro Global</div>
+                </div>
+                <div class="stat-card">
+                    <div style="font-size: 1.8rem; margin-bottom: 10px;">🏪</div>
+                    <div class="stat-label"><strong>CAPA 2:</strong><br>Marketplace ERC-1155</div>
+                </div>
+                <div class="stat-card">
+                    <div style="font-size: 1.8rem; margin-bottom: 10px;">🧠</div>
+                    <div class="stat-label"><strong>CAPA 3:</strong><br>IA Conversacional</div>
+                </div>
+            </div>
+
+            <div style="background: rgba(54, 189, 175, 0.1); padding: 20px; border-radius: 15px; margin: 20px 0;">
+                <h3 style="color: #181936; margin-bottom: 15px;">¿Por qué Avalanche?</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; text-align: left;">
+                    <div>⚡ <strong>4,500+ TPS</strong> vs 15 Ethereum</div>
+                    <div>💰 <strong>$0.01</strong> por transacción</div>
+                    <div>🌱 <strong>99.9%</strong> menos energía</div>
+                    <div>⚖️ <strong>Subnets</strong> compliance</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: ERC-1155 Ventaja -->
+        <div class="slide">
+            <h2>🔥 ERC-1155: LA VENTAJA SECRETA</h2>
+            <div class="subtitle">Una Propiedad, Múltiples Activos Digitales</div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div style="font-size: 2rem; margin-bottom: 15px;">🏠</div>
+                    <div class="stat-label"><strong>Token Propiedad:</strong> % Ownership + Voting Rights</div>
+                </div>
+                <div class="stat-card">
+                    <div style="font-size: 2rem; margin-bottom: 15px;">💰</div>
+                    <div class="stat-label"><strong>Token Renta:</strong> Flujo mensual garantizado</div>
+                </div>
+                <div class="stat-card">
+                    <div style="font-size: 2rem; margin-bottom: 15px;">🔧</div>
+                    <div class="stat-label"><strong>Token Mejoras:</strong> ROI de renovaciones</div>
+                </div>
+                <div class="stat-card">
+                    <div style="font-size: 2rem; margin-bottom: 15px;">⚡</div>
+                    <div class="stat-label"><strong>Token Utilidad:</strong> Governance + Rewards</div>
+                </div>
+            </div>
+
+            <div class="highlight" style="font-size: 1.5rem; margin: 30px 0; padding: 20px; background: rgba(50, 187, 117, 0.1); border-radius: 15px;">
+                "Una innovación que NINGÚN competidor puede replicar fácilmente"
+            </div>
+        </div>
+
+        <!-- Slide 6: Mercado -->
+        <div class="slide">
+            <h2>📊 OPORTUNIDAD DE $4 TRILLONES</h2>
+            <div class="subtitle">Los Números No Mienten</div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">$4T+</div>
+                    <div class="stat-label">Global 2030<br>(68% CAGR)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">$3.9B</div>
+                    <div class="stat-label">LATAM 2030<br>(13.6% CAGR)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">51</div>
+                    <div class="stat-label">Empresas proptech<br>Colombia</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">20%</div>
+                    <div class="stat-label">Funding VC LATAM<br>En Colombia</div>
+                </div>
+            </div>
+
+            <div style="background: rgba(50, 187, 117, 0.1); padding: 20px; border-radius: 15px; margin: 20px 0;">
+                <h3 style="color: #181936; margin-bottom: 15px;">🎯 Mercado Servicible</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">15M</div>
+                        <div class="stat-label">Familias clase media LATAM</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">$47B</div>
+                        <div class="stat-label">Buscando alternativas</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">500K</div>
+                        <div class="stat-label">Target Colombia (3.3%)</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight" style="font-size: 1.4rem;">
+                "Si capturamos 0.5% del mercado = $2 BILLONES oportunidad"
+            </div>
+
+            <div style="font-size: 1rem; margin-top: 15px; color: #181936;">
+                Casos éxito: Habi (unicornio), La Haus, Houm
+            </div>
+        </div>
+
+        <!-- Slide 7: Demo Voice-AI -->
+        <div class="slide">
+            <h2>🎤 LA EXPERIENCIA QUE CAMBIA TODO</h2>
+            <div class="subtitle">Voice-AI: Cero Formularios, Total Simplicidad</div>
+            
+            <div style="background: linear-gradient(135deg, rgba(50, 187, 117, 0.1), rgba(66, 191, 236, 0.1)); padding: 30px; border-radius: 15px; margin: 30px 0; text-align: left;">
+                <div style="margin-bottom: 20px;">
+                    <strong style="color: #32BB75;">👤 Usuario:</strong> <em>"Hola, quiero registrar mi apartamento"</em>
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <strong style="color: #42BFEC;">🤖 VivenDApp:</strong> <em>"¡Perfecto! ¿Cuál es la dirección?"</em>
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <strong style="color: #32BB75;">👤 Usuario:</strong> <em>"Carrera 15 #85-23, Bogotá"</em>
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <strong style="color: #42BFEC;">🤖 VivenDApp:</strong> <em>"Excelente. Muéstrame el exterior con la cámara..."</em>
+                </div>
+                <div style="text-align: center; margin: 20px 0;">
+                    <div class="pulse" style="display: inline-block; background: rgba(54, 189, 175, 0.2); padding: 15px; border-radius: 10px;">
+                        📱 [Computer Vision analiza en tiempo real]
+                    </div>
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <strong style="color: #42BFEC;">🤖 VivenDApp:</strong> <em>"Valor estimado: $180,000 USD. ¿Tokenizamos el 30%?"</em>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">3min</div>
+                    <div class="stat-label">Tiempo Total</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">$0.03</div>
+                    <div class="stat-label">Costo Avalanche</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">🪄</div>
+                    <div class="stat-label">Experiencia</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Tokenomics -->
+        <div class="slide">
+            <h2>💎 TOKENOMICS DISEÑADO PARA EXPLOTAR</h2>
+            <div class="subtitle">Sistema Dual que Maximiza Valor</div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3 style="color: #4facfe; margin-bottom: 15px;">VivenStable</h3>
+                    <ul style="text-align: left; list-style: none;">
+                        <li>🏠 70% respaldo propiedades</li>
+                        <li>💰 20% reservas USDC.e</li>
+                        <li>🔄 10% algorítmico</li>
+                        <li>📈 8-12% APY staking</li>
+                    </ul>
+                </div>
+                <div class="stat-card">
+                    <h3 style="color: #00f2fe; margin-bottom: 15px;">VivenRewards</h3>
+                    <ul style="text-align: left; list-style: none;">
+                        <li>🎯 1B tokens máximo</li>
+                        <li>🔥 20% fees quemados</li>
+                        <li>💸 15-25% APY staking</li>
+                        <li>🗳️ Governance total</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="background: rgba(50, 187, 117, 0.1); padding: 30px; border-radius: 15px; margin: 30px 0;">
+                <h3 style="color: #181936; margin-bottom: 20px;">🔥 Mecanismos Deflacionarios</h3>
+                <ul class="features-list">
+                    <li>⚡ Quema por transacciones altas</li>
+                    <li>⏰ Halving cada 2 años</li>
+                    <li>💰 Buyback trimestral automático</li>
+                    <li>🔒 Locked staking con multiplicadores</li>
+                </ul>
+            </div>
+
+            <div class="highlight" style="font-size: 1.3rem;">
+                "Tokenomics diseñados para crear millonarios, no para extraer valor"
+            </div>
+        </div>
+
+        <!-- Slide 9: Tracción -->
+        <div class="slide">
+            <h2>🚀 TRACCIÓN - VALIDACIÓN REAL</h2>
+            <div class="subtitle">Los Números Hablan Solos</div>
+            
+            <div class="stats-grid">
+                <div class="stat-card pulse">
+                    <div class="stat-number">1,247</div>
+                    <div class="stat-label">Usuarios Waitlist (30 días)</div>
+                </div>
+                <div class="stat-card pulse">
+                    <div class="stat-number">78%</div>
+                    <div class="stat-label">Conversion Rate</div>
+                </div>
+                <div class="stat-card pulse">
+                    <div class="stat-number">$2.3M</div>
+                    <div class="stat-label">Intención Inversión</div>
+                </div>
+                <div class="stat-card pulse">
+                    <div class="stat-number">95%</div>
+                    <div class="stat-label">Precisión IA Valuación</div>
+                </div>
+            </div>
+
+            <div style="background: rgba(66, 191, 236, 0.1); padding: 30px; border-radius: 15px; margin: 30px 0;">
+                <h3 style="color: #181936; margin-bottom: 20px;">✅ Validación de Mercado</h3>
+                <ul class="features-list">
+                    <li>🏢 3 partnerships inmobiliarias Bogotá</li>
+                    <li>🏦 Letter of intent Bancolombia</li>
+                    <li>⚖️ Pre-approval Superintendencia</li>
+                    <li>💰 $150K pre-seed comprometido</li>
+                </ul>
+            </div>
+
+            <div class="highlight" style="font-size: 1.3rem;">
+                "La demanda reprimida es MASIVA - solo esperaban la solución correcta"
+            </div>
+        </div>
+
+        <!-- Slide 10: Competencia -->
+        <div class="slide">
+            <h2>🏆 BLUE OCEAN TOTAL</h2>
+            <div class="subtitle">Estamos Solos en el Mercado que Importa</div>
+            
+            <div style="background: rgba(50, 187, 117, 0.1); padding: 20px; border-radius: 15px; margin: 20px 0;">
+                <h3 style="color: #181936; margin-bottom: 15px;">🎯 Competidores Actuales</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; font-size: 1rem; text-align: left;">
+                    <div><strong>RealT:</strong> $101M, USA only<br><span style="color: #e74c3c;">❌ Ignora LATAM</span></div>
+                    <div><strong>Lofty:</strong> $37.6M, Algorand<br><span style="color: #e74c3c;">❌ Solo US, técnico</span></div>
+                    <div><strong>Fraction:</strong> $25M, REITs<br><span style="color: #e74c3c;">❌ $5K mínimo</span></div>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div style="font-size: 1.8rem; margin-bottom: 8px;">🎤</div>
+                    <div class="stat-label"><strong>ÚNICOS</strong><br>Voice-AI mundial</div>
+                </div>
+                <div class="stat-card">
+                    <div style="font-size: 1.8rem; margin-bottom: 8px;">🌎</div>
+                    <div class="stat-label"><strong>ÚNICOS</strong><br>LATAM focus</div>
+                </div>
+                <div class="stat-card">
+                    <div style="font-size: 1.8rem; margin-bottom: 8px;">💰</div>
+                    <div class="stat-label"><strong>ÚNICOS</strong><br>Desde $50 USD</div>
+                </div>
+                <div class="stat-card">
+                    <div style="font-size: 1.8rem; margin-bottom: 8px;">⚖️</div>
+                    <div class="stat-label"><strong>ÚNICOS</strong><br>Compliance-first</div>
+                </div>
+            </div>
+
+            <div style="background: rgba(66, 191, 236, 0.1); padding: 20px; border-radius: 15px; margin: 20px 0;">
+                <h3 style="color: #181936; margin-bottom: 15px;">🛡️ Barreras Defensibles</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; font-size: 1rem;">
+                    <div>📈 Network effects exponenciales</div>
+                    <div>🔒 Data moats propietarios</div>
+                    <div>⚖️ Regulatory moats por país</div>
+                    <div>🏆 18+ meses head start</div>
+                </div>
+            </div>
+
+            <div class="highlight" style="font-size: 1.3rem;">
+                "Con 10,000 propiedades tokenizadas, nadie nos alcanza"
+            </div>
+        </div>
+
+        <!-- Slide 11: Proyecciones -->
+        <div class="slide">
+            <h2>📈 CAMINO AL UNICORNIO</h2>
+            <div class="subtitle">Matemáticas Simples = Millones de Dólares</div>
+            
+            <div style="background: rgba(50, 187, 117, 0.1); padding: 20px; border-radius: 15px; margin: 20px 0;">
+                <h3 style="color: #181936; margin-bottom: 15px;">💰 Proyecciones 3 Años</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div style="font-size: 1.5rem; color: #181936; margin-bottom: 8px;"><strong>Año 1</strong></div>
+                        <div style="font-size: 0.9rem;">$75K MRR • 200 prop • $8M AUM</div>
+                    </div>
+                    <div class="stat-card">
+                        <div style="font-size: 1.5rem; color: #181936; margin-bottom: 8px;"><strong>Año 2</strong></div>
+                        <div style="font-size: 0.9rem;">$350K MRR • 1.5K prop • $50M AUM</div>
+                    </div>
+                    <div class="stat-card">
+                        <div style="font-size: 1.5rem; color: #32BB75; margin-bottom: 8px;"><strong>Año 3</strong></div>
+                        <div style="font-size: 0.9rem; color: #32BB75;"><strong>$1M MRR • 5K prop • $150M AUM</strong></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">4.27x</div>
+                    <div class="stat-label">LTV/CAC Ratio<br>(>3x target)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">68%</div>
+                    <div class="stat-label">Gross Margin<br>(Software puro)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">25%</div>
+                    <div class="stat-label">Net Margin Año 3<br>(Profitabilidad)</div>
+                </div>
+            </div>
+
+            <div style="background: rgba(66, 191, 236, 0.1); padding: 20px; border-radius: 15px; margin: 20px 0;">
+                <h3 style="color: #181936; margin-bottom: 15px;">🎯 Path to Profitability</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; font-size: 1rem;">
+                    <div><strong>Año 1:</strong> -$800K<br><span style="color: #e74c3c;">Inversión growth</span></div>
+                    <div><strong>Año 2:</strong> -$200K<br><span style="color: #f39c12;">Break-even</span></div>
+                    <div><strong>Año 3:</strong> +$2M<br><span style="color: #27ae60;">25% margin</span></div>
+                </div>
+            </div>
+
+            <div class="highlight" style="font-size: 1.4rem;">
+                "Llegamos a $1M MRR con matemáticas conservadoras"
+            </div>
+        </div>
+
+        <!-- Slide 12: Fundraising -->
+        <div class="slide">
+            <h2>💰 LA OPORTUNIDAD DE SU VIDA</h2>
+            <div class="subtitle">$2M Seed Round - Pre-Money $8M</div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">40%</div>
+                    <div class="stat-label">Desarrollo Producto</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">25%</div>
+                    <div class="stat-label">Regulatorio & Legal</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">20%</div>
+                    <div class="stat-label">Marketing & Growth</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">15%</div>
+                    <div class="stat-label">Operations</div>
+                </div>
+            </div>
+
+            <div style="background: rgba(50, 187, 117, 0.1); padding: 30px; border-radius: 15px; margin: 30px 0;">
+                <h3 style="color: #181936; margin-bottom: 20px;">🎯 Milestones Garantizados (18 meses)</h3>
+                <ul class="features-list">
+                    <li>📅 Mes 6: $15K MRR, 1K usuarios</li>
+                    <li>📅 Mes 12: $75K MRR, 5K usuarios, Argentina</li>
+                    <li>📅 Mes 18: $150K MRR, 15K usuarios, Series A ready</li>
+                </ul>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card pulse">
+                    <div class="stat-number">$5-8M</div>
+                    <div class="stat-label">Series A Proyección</div>
+                </div>
+                <div class="stat-card pulse">
+                    <div class="stat-number">4-5x</div>
+                    <div class="stat-label">ROI 18 meses</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 13: Equipo -->
+        <div class="slide">
+            <h2>👥 EJECUTORES COMPROBADOS</h2>
+            <div class="subtitle">Track Record que Garantiza Éxito</div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3 style="color: #32BB75; margin-bottom: 12px;">👨‍💼 CEO & Founder</h3>
+                    <div style="text-align: left; font-size: 1rem;">
+                        <strong>Cristian Mosquera Becerra</strong><br>
+                        • 5+ años blockchain/fintech<br>
+                        • 3 startups, 1 exit exitoso<br>
+                        • Red: 50+ reguladores
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <h3 style="color: #42BFEC; margin-bottom: 12px;">🔍 CTO Target</h3>
+                    <div style="text-align: left; font-size: 1rem;">
+                        <strong>Ex-Ava Labs/Consensys</strong><br>
+                        • 10+ auditorías exitosas<br>
+                        • ERC-1155 + Computer vision<br>
+                        • Avalanche expertise
+                    </div>
+                </div>
+            </div>
+
+            <div style="background: rgba(66, 191, 236, 0.1); padding: 20px; border-radius: 15px; margin: 20px 0;">
+                <h3 style="color: #181936; margin-bottom: 15px;">🎯 Advisory Board</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; font-size: 1rem; text-align: left;">
+                    <div><strong>Juan David Borrero</strong><br>Ex-Addi ($2.3B valuación)</div>
+                    <div><strong>Regulatory Expert</strong><br>Ex-Superintendente Financiero</div>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">1-3</div>
+                    <div class="stat-label">Meses: CTO + AI lead</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">4-6</div>
+                    <div class="stat-label">Meses: Compliance + Sales</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">7-12</div>
+                    <div class="stat-label">Meses: Regional expansion</div>
+                </div>
+            </div>
+
+            <div class="highlight" style="font-size: 1.3rem;">
+                "Team que construyó unicornios, lo hará de nuevo"
+            </div>
+        </div>
+
+        <!-- Slide 14: Why Now -->
+        <div class="slide">
+            <h2>⚡ TORMENTA PERFECTA</h2>
+            <div class="subtitle">6 Fuerzas Convergen para Crear el Momento Ideal</div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div style="font-size: 1.8rem; margin-bottom: 8px;">⚖️</div>
+                    <div class="stat-label"><strong>REGULATORIO</strong><br>Colombia Q2 2025</div>
+                </div>
+                <div class="stat-card">
+                    <div style="font-size: 1.8rem; margin-bottom: 8px;">⚡</div>
+                    <div class="stat-label"><strong>TECH</strong><br>Avalanche + GPT-4</div>
+                </div>
+                <div class="stat-card">
+                    <div style="font-size: 1.8rem; margin-bottom: 8px;">🏠</div>
+                    <div class="stat-label"><strong>MERCADO</strong><br>43M déficit</div>
+                </div>
+                <div class="stat-card">
+                    <div style="font-size: 1.8rem; margin-bottom: 8px;">🎯</div>
+                    <div class="stat-label"><strong>COMPETENCIA</strong><br>Ignoran LATAM</div>
+                </div>
+                <div class="stat-card">
+                    <div style="font-size: 1.8rem; margin-bottom: 8px;">📈</div>
+                    <div class="stat-label"><strong>ECONÓMICO</strong><br>8-12% LATAM</div>
+                </div>
+                <div class="stat-card">
+                    <div style="font-size: 1.8rem; margin-bottom: 8px;">💰</div>
+                    <div class="stat-label"><strong>CAPITAL</strong><br>$15.1B proptech</div>
+                </div>
+            </div>
+
+            <div style="background: rgba(54, 189, 175, 0.1); padding: 20px; border-radius: 15px; margin: 20px 0;">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">42.5%</div>
+                        <div class="stat-label">Adopción crypto LATAM</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">67%</div>
+                        <div class="stat-label">Países blockchain-friendly</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight" style="font-size: 1.4rem;">
+                "Los próximos 18 meses = oportunidad única de década"
+            </div>
+        </div>
+
+        <!-- Slide 15: Visión 2030 -->
+        <div class="slide">
+            <h2>🚀 VISION 2030 - LEGACY BUILDER</h2>
+            <div class="subtitle">El Mercado Libre del Real Estate</div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">2025</div>
+                    <div class="stat-label">Colombia líder<br>10K usuarios</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">2027</div>
+                    <div class="stat-label">5 países<br>$200M AUM</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">2029</div>
+                    <div class="stat-label">IPO track<br>$1B+ AUM</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">2030</div>
+                    <div class="stat-label">Category defining<br>1M+ usuarios</div>
+                </div>
+            </div>
+
+            <div style="background: rgba(50, 187, 117, 0.1); padding: 20px; border-radius: 15px; margin: 20px 0;">
+                <h3 style="color: #181936; margin-bottom: 15px;">🎯 Metas de Impacto</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">1M+</div>
+                        <div class="stat-label">Familias con acceso</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">$10B+</div>
+                        <div class="stat-label">AUM democratizado</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">50%</div>
+                        <div class="stat-label">Reducción costos</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background: rgba(66, 191, 236, 0.1); padding: 15px; border-radius: 15px; font-size: 1rem;">
+                <strong>Exit Options:</strong> Strategic (Mercado Libre, Softbank) • IPO (50M+ ARR) • Category Leader
+            </div>
+
+            <div class="highlight" style="font-size: 1.3rem; margin-top: 15px;">
+                "No construimos una empresa, construimos el futuro"
+            </div>
+        </div>
+
+        <!-- Slide 16: Call to Action -->
+        <div class="slide">
+            <h2>🤝 ÚNETE A LA REVOLUCIÓN</h2>
+            <div class="subtitle">Esta es SU Oportunidad Histórica</div>
+            
+            <div class="stats-grid">
+                <div class="stat-card pulse">
+                    <div style="font-size: 1.8rem; margin-bottom: 8px;">🚀</div>
+                    <div class="stat-label">First-mover $4T</div>
+                </div>
+                <div class="stat-card pulse">
+                    <div style="font-size: 1.8rem; margin-bottom: 8px;">🛡️</div>
+                    <div class="stat-label">Moat Voice-AI</div>
+                </div>
+                <div class="stat-card pulse">
+                    <div style="font-size: 1.8rem; margin-bottom: 8px;">📈</div>
+                    <div class="stat-label">15M+ familias</div>
+                </div>
+                <div class="stat-card pulse">
+                    <div style="font-size: 1.8rem; margin-bottom: 8px;">💎</div>
+                    <div class="stat-label">50-100x returns</div>
+                </div>
+            </div>
+
+            <div style="background: linear-gradient(135deg, rgba(50, 187, 117, 0.1), rgba(66, 191, 236, 0.1)); padding: 20px; border-radius: 15px; margin: 20px 0; text-align: center;">
+                <h3 style="color: #181936; margin-bottom: 15px;">🎯 Investment Thesis</h3>
+                <p style="font-size: 1.2rem; font-style: italic;">"VivenDApp se posiciona como la plataforma que definirá la inversión real estate en LATAM, montando tendencias seculares: crisis habitacional, adopción blockchain, maduración IA."</p>
+            </div>
+
+            <div style="margin: 25px 0;">
+                <a href="mailto:cristian@vivendapp.tech" class="cta-button">📧 Contactar</a>
+                <a href="tel:+573218526744" class="cta-button">📱 Llamar</a>
+            </div>
+
+            <div class="highlight" style="font-size: 1.6rem; margin: 20px 0;">
+                "¿Van a ser los VCs que respaldaron<br>el protocolo que democratizó el real estate?"
+            </div>
+
+            <div style="font-size: 1.3rem; margin: 20px 0; animation: pulse 2s infinite;">
+                🏠 EL MOMENTO ES AHORA<br>
+                💰 LA OPORTUNIDAD ES ÚNICA<br>
+                🚀 EL RETORNO SERÁ LEGENDARIO
+            </div>
+        </div>
+    </div>
+
+    <div class="navigation">
+        <button class="nav-btn" id="prevBtn">← Anterior</button>
+        <button class="nav-btn" id="nextBtn">Siguiente →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        
+        document.getElementById('total-slides').textContent = totalSlides;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            slides[currentSlide].classList.add('prev');
+            
+            currentSlide = (n + totalSlides) % totalSlides;
+            
+            slides[currentSlide].classList.remove('prev');
+            slides[currentSlide].classList.add('active');
+            
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+            
+            // Restart animations for list items
+            const listItems = slides[currentSlide].querySelectorAll('.features-list li');
+            listItems.forEach((item, index) => {
+                item.style.animation = 'none';
+                item.offsetHeight; // Trigger reflow
+                item.style.animation = `slideInLeft 0.6s ease forwards`;
+                item.style.animationDelay = `${index * 0.1 + 0.2}s`;
+            });
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function prevSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        // Event listeners
+        document.getElementById('nextBtn').addEventListener('click', nextSlide);
+        document.getElementById('prevBtn').addEventListener('click', prevSlide);
+
+        // Keyboard navigation - simplified
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                prevSlide();
+            }
+        });
+
+        // Touch/swipe support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) {
+                nextSlide();
+            }
+            if (touchEndX > touchStartX + 50) {
+                prevSlide();
+            }
+        }
+
+        // Particle animation
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 6 + 's';
+            particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+            document.getElementById('particles').appendChild(particle);
+            
+            setTimeout(() => {
+                particle.remove();
+            }, 6000);
+        }
+
+        // Create particles periodically
+        setInterval(createParticle, 300);
+
+        // Initialize first slide animations
+        showSlide(0);
+    </script>
+</body>
+</html>
