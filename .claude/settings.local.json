@@ -4,7 +4,11 @@
       "Read(/D:\\VIVENDAPP 2025\\PPT VivenDapp/**)",
       "Read(/D:\\VIVENDAPP 2025\\PPT VivenDapp/**)",
       "Bash(git init:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git remote add:*)",
+      "Bash(git branch:*)",
+      "Bash(git push:*)"
     ],
     "deny": [],
     "ask": []
